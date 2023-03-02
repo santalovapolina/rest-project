@@ -13,7 +13,7 @@ public class ApiTests {
 
     public static final String BASE_URL = "https://reqres.in/";
 
-    @DisplayName("Verify the total users number")
+    @DisplayName("Verify total users number")
     @Test
     void checkUsersNumber() {
 
