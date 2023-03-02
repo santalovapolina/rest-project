@@ -41,6 +41,7 @@ public class ApiTests {
                 .then()
                 .log().status()
                 .log().body()
+                .statusCode(200)
                 .body("data.id", equalTo(2),
                         "data.email", equalTo("janet.weaver@reqres.in"),
                         "data.first_name", equalTo("Janet"),
