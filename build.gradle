@@ -4,10 +4,6 @@ plugins {
     id "io.freefair.lombok" version "6.5.1"
 }
 
-group "com.sardeni"
-version "1.0-SNAPSHOT"
-
-
 repositories {
     mavenCentral()
 }
