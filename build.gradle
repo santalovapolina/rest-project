@@ -16,7 +16,6 @@ dependencies {
     testImplementation(
             "com.codeborne:selenide:6.11.0",
             "io.rest-assured:rest-assured:$restAssuredVersion",
-            "io.rest-assured:json-schema-validator:$restAssuredVersion",
             "io.qameta.allure:allure-rest-assured:$allureVersion",
             "org.junit.jupiter:junit-jupiter-api:5.9.1",
             "io.qameta.allure:allure-selenide:$allureVersion",
