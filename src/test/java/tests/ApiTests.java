@@ -3,6 +3,7 @@ package tests;
 
 import models.CreateUpdateUserPayload;
 import models.LoginPayload;
+import models.SingleUserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static specs.Specs.*;
 
 
@@ -36,19 +38,22 @@ public class ApiTests {
     @DisplayName("Verify single user data")
     @Test
     void getSingleUser() {
-        step("Verify single user by id, email, first and last name", () -> {
-            given()
+        step("Verify single user data by id, email, first and last name", () -> {
+            SingleUserResponse data = given()
                     .spec(baseRequestSpec)
                     .when()
                     .get("/users/2")
                     .then()
                     .spec(baseResponseSpecCode200)
-                    .body("data.id", equalTo(2),
-                            "data.email", equalTo("janet.weaver@reqres.in"),
-                            "data.first_name", equalTo("Janet"),
-                            "data.last_name", equalTo("Weaver"));
+                    .extract().as(SingleUserResponse.class);
+
+            assertEquals(2, data.getUser().getId());
+            assertEquals("janet.weaver@reqres.in", data.getUser().getEmail());
+            assertEquals("Janet", data.getUser().getFirstName());
+            assertEquals("Weaver", data.getUser().getLastName());
         });
     }
+
 
     @Tag("api")
     @DisplayName("Verify created user data")
@@ -66,6 +71,7 @@ public class ApiTests {
                     .then()
                     .spec(baseResponseSpecCode201)
                     .extract().as(CreateUpdateUserPayload.CreateUserResponse.class);
+
             assertThat(response.getName()).isEqualTo("morpheus");
             assertThat(response.getJob()).isEqualTo("leader");
             assertThat(response.getCreatedAt()).isNotNull();
@@ -89,6 +95,7 @@ public class ApiTests {
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(CreateUpdateUserPayload.UpdateUserResponse.class);
+
             assertThat(response.getName()).isEqualTo("morpheus");
             assertThat(response.getJob()).isEqualTo("zion resident");
             assertThat(response.getUpdatedAt()).isNotNull();
@@ -111,6 +118,7 @@ public class ApiTests {
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(LoginPayload.LoginResponse.class);
+
             assertThat(response.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
         });
     }

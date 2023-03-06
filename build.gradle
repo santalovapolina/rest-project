@@ -10,7 +10,9 @@ repositories {
 
 def allureVersion = "2.21.0",
     assertJVersion = "3.24.2",
-    restAssuredVersion = "5.3.0"
+    restAssuredVersion = "5.3.0",
+    jacksonVersion = "2.14.0"
+
 
 dependencies {
     testImplementation(
@@ -20,7 +22,9 @@ dependencies {
             "org.junit.jupiter:junit-jupiter-api:5.9.1",
             "io.qameta.allure:allure-selenide:$allureVersion",
             "org.assertj:assertj-core:$assertJVersion",
-            "org.aeonbits.owner:owner:1.0.12"
+            "org.aeonbits.owner:owner:1.0.12",
+            "com.fasterxml.jackson.core:jackson-core:$jacksonVersion",
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     )
 
     allure {
