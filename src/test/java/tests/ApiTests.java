@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
@@ -143,6 +144,7 @@ public class ApiTests {
         });
     }
 
+    @Tag("api")
     @DisplayName("Verify user's email using groovy")
     @Test
     void emailTestUsingGroovy() {
@@ -158,6 +160,7 @@ public class ApiTests {
         });
     }
 
+    @Tag("api")
     @DisplayName("Verify user's email using jsonPath")
     @Test
     void emailTestUsingJsonPath() {
@@ -175,6 +178,7 @@ public class ApiTests {
         });
     }
 
+    @Tag("api")
     @DisplayName("Verify user's email by id using groovy")
     @Test
     void idTestUsingGroovy() {
@@ -185,11 +189,29 @@ public class ApiTests {
                     .get("/users?page=2")
                     .then()
                     .spec(baseResponseSpecCode200)
-                    .body("data.find{ it.id == 9}.email", is("tobias.funke@reqres.in"));
+                    .body("data.find{it.id == 9}.email", is("tobias.funke@reqres.in"));
+        });
+    }
+
+    @Tag("api")
+    @DisplayName("Verify year by name using groovy")
+    @Test
+    void nameTestUsingGroovy() {
+        step("Verify year by name using groovy", () -> {
+            Response response = given()
+                    .spec(baseRequestSpec)
+                    .when()
+                    .get("/unknown")
+                    .then()
+                    .spec(baseResponseSpecCode200)
+                    .extract().response();
+            Map<String, Object> tigerlily = response.path("data.find{it.name == 'tigerlily'}");
+            assertEquals(2004, tigerlily.get("year"));
         });
     }
 
 
+    @Tag("api")
     @DisplayName("Verify user's emails end with domain")
     @Test
     void checkUserEmailsEndWithDomain() {
