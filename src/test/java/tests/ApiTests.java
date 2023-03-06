@@ -17,8 +17,7 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static specs.Specs.*;
@@ -161,7 +160,7 @@ public class ApiTests {
 
     @DisplayName("Verify user's email using jsonPath")
     @Test
-    void checkResponseUsingJsonPath() {
+    void emailTestUsingJsonPath() {
         step("Verify user's email using jsonPath", () -> {
             Response response = given()
                     .spec(baseRequestSpec)
@@ -173,6 +172,20 @@ public class ApiTests {
             JsonPath jsonPath = response.jsonPath();
             List<String> emails = jsonPath.get("data.email");
             assertTrue(emails.contains("rachel.howell@reqres.in"));
+        });
+    }
+
+    @DisplayName("Verify user's email by id using groovy")
+    @Test
+    void idTestUsingGroovy() {
+        step("Verify user's email by id using groovy", () -> {
+            given()
+                    .spec(baseRequestSpec)
+                    .when()
+                    .get("/users?page=2")
+                    .then()
+                    .spec(baseResponseSpecCode200)
+                    .body("data.find{ it.id == 9}.email", is("tobias.funke@reqres.in"));
         });
     }
 
