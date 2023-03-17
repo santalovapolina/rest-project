@@ -1,6 +1,5 @@
 package tests;
 
-
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import models.CreateUpdateUserPayload;
@@ -14,10 +13,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
+import static helpers.Endpoints.*;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,6 +24,7 @@ import static specs.Specs.*;
 
 
 public class ApiTests {
+
 
     @Tag("api")
     @DisplayName("Verify total users number")
@@ -34,7 +34,7 @@ public class ApiTests {
             given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get("/users?page=2")
+                    .get(LIST_USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .body("total", equalTo(12));
@@ -49,7 +49,7 @@ public class ApiTests {
             SingleUserResponse data = given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get("/users/2")
+                    .get(INTERACT_WITH_USER)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(SingleUserResponse.class);
@@ -74,7 +74,7 @@ public class ApiTests {
                     .spec(baseRequestSpec)
                     .body(data)
                     .when()
-                    .post("/users")
+                    .post(USERS)
                     .then()
                     .spec(baseResponseSpecCode201)
                     .extract().as(CreateUpdateUserPayload.CreateUserResponse.class);
@@ -98,7 +98,7 @@ public class ApiTests {
                     .spec(baseRequestSpec)
                     .body(data)
                     .when()
-                    .put("/users/2")
+                    .put(INTERACT_WITH_USER)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(CreateUpdateUserPayload.UpdateUserResponse.class);
@@ -121,7 +121,7 @@ public class ApiTests {
                     .spec(baseRequestSpec)
                     .body(data)
                     .when()
-                    .post("/register")
+                    .post(REGISTER_USER)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(LoginPayload.LoginResponse.class);
@@ -138,21 +138,21 @@ public class ApiTests {
             given()
                     .spec(baseRequestSpec)
                     .when()
-                    .delete("/users/2")
+                    .delete(INTERACT_WITH_USER)
                     .then()
                     .spec(baseResponseSpecCode204);
         });
     }
 
     @Tag("api")
-    @DisplayName("Verify user's email using groovy")
+    @DisplayName("Verify user email using groovy")
     @Test
     void emailTestUsingGroovy() {
-        step("Verify user's email using groovy", () -> {
+        step("Verify user email using groovy", () -> {
             given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get("/users?page=2")
+                    .get(LIST_USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .body("data.findAll{it.email =~/.*?@reqres.in/}.email.flatten()",
@@ -161,14 +161,14 @@ public class ApiTests {
     }
 
     @Tag("api")
-    @DisplayName("Verify user's email using jsonPath")
+    @DisplayName("Verify user email using jsonPath")
     @Test
     void emailTestUsingJsonPath() {
-        step("Verify user's email using jsonPath", () -> {
+        step("Verify user email using jsonPath", () -> {
             Response response = given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get("/users?page=2")
+                    .get(LIST_USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().response();
@@ -179,14 +179,14 @@ public class ApiTests {
     }
 
     @Tag("api")
-    @DisplayName("Verify user's email by id using groovy")
+    @DisplayName("Verify user email by id using groovy")
     @Test
     void idTestUsingGroovy() {
-        step("Verify user's email by id using groovy", () -> {
+        step("Verify user email by id using groovy", () -> {
             given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get("/users?page=2")
+                    .get(LIST_USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .body("data.find{it.id == 9}.email", is("tobias.funke@reqres.in"));
@@ -201,7 +201,7 @@ public class ApiTests {
             Response response = given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get("/unknown")
+                    .get(UNKNOWN)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().response();
@@ -212,14 +212,14 @@ public class ApiTests {
 
 
     @Tag("api")
-    @DisplayName("Verify user's emails end with domain")
+    @DisplayName("Verify user emails end with domain")
     @Test
     void checkUserEmailsEndWithDomain() {
-        step("Verify user's emails end with domain", () -> {
+        step("Verify user emails end with domain", () -> {
             List<ListUsersResponse> users = given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get("/users?page=2")
+                    .get(LIST_USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().body().jsonPath().getList("data", ListUsersResponse.class);

@@ -21,6 +21,7 @@ public class Specs {
             .filter(withCustomTemplates())
             .contentType(ContentType.JSON);
 
+
     public static ResponseSpecification baseResponseSpecCode200 = new ResponseSpecBuilder()
             .log(STATUS)
             .log(BODY)
