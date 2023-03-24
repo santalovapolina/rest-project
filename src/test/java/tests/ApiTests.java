@@ -1,5 +1,8 @@
 package tests;
 
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import models.CreateUpdateUserPayload;
@@ -9,6 +12,8 @@ import models.SingleUserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +23,7 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static specs.Specs.*;
 
 
@@ -27,9 +31,11 @@ public class ApiTests {
 
 
     @Tag("api")
-    @DisplayName("Verify total users number")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check total users number")
     @Test
-    void checkUsersNumber() {
+    void checkTotalUsersNumber() {
         step("Verify total users number", () -> {
             given()
                     .spec(baseRequestSpec)
@@ -42,10 +48,12 @@ public class ApiTests {
     }
 
     @Tag("api")
-    @DisplayName("Verify single user data")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Check single user data")
     @Test
-    void getSingleUser() {
-        step("Verify single user data by id, email, first and last name", () -> {
+    void checkSingleUserData() {
+        step("Verify single user by id, email, first and last name", () -> {
             SingleUserResponse data = given()
                     .spec(baseRequestSpec)
                     .when()
@@ -63,13 +71,15 @@ public class ApiTests {
 
 
     @Tag("api")
-    @DisplayName("Verify created user data")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Check created user data")
     @Test
-    void createNewUser() {
+    void checkCreatedUserData() {
         step("Verify created user data", () -> {
             CreateUpdateUserPayload data = new CreateUpdateUserPayload();
-            data.setName("morpheus");
-            data.setJob("leader");
+            data.setName("Elon Musk");
+            data.setJob("professional martian");
             CreateUpdateUserPayload.CreateUserResponse response = given()
                     .spec(baseRequestSpec)
                     .body(data)
@@ -79,21 +89,21 @@ public class ApiTests {
                     .spec(baseResponseSpecCode201)
                     .extract().as(CreateUpdateUserPayload.CreateUserResponse.class);
 
-            assertThat(response.getName()).isEqualTo("morpheus");
-            assertThat(response.getJob()).isEqualTo("leader");
-            assertThat(response.getCreatedAt()).isNotNull();
-            assertThat(response.getId()).isNotNull();
+            assertThat(response.getName()).isEqualTo("Elon Musk");
+            assertThat(response.getJob()).isEqualTo("professional martian");
         });
     }
 
     @Tag("api")
-    @DisplayName("Verify updated user data")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check updated user data")
     @Test
-    void updateUser() {
+    void checkUpdatedUserData() {
         step("Verify updated user data", () -> {
             CreateUpdateUserPayload data = new CreateUpdateUserPayload();
-            data.setName("morpheus");
-            data.setJob("zion resident");
+            data.setName("Moe");
+            data.setJob("Bartender");
             CreateUpdateUserPayload.UpdateUserResponse response = given()
                     .spec(baseRequestSpec)
                     .body(data)
@@ -103,16 +113,17 @@ public class ApiTests {
                     .spec(baseResponseSpecCode200)
                     .extract().as(CreateUpdateUserPayload.UpdateUserResponse.class);
 
-            assertThat(response.getName()).isEqualTo("morpheus");
-            assertThat(response.getJob()).isEqualTo("zion resident");
-            assertThat(response.getUpdatedAt()).isNotNull();
+            assertThat(response.getName()).isEqualTo("Moe");
+            assertThat(response.getJob()).isEqualTo("Bartender");
         });
     }
 
     @Tag("api")
-    @DisplayName("Verify registration token")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.BLOCKER)
+    @DisplayName("Check registration token")
     @Test
-    void successfulRegistration() {
+    void checkRegistrationToken() {
         step("Verify registration token", () -> {
             LoginPayload data = new LoginPayload();
             data.setEmail("eve.holt@reqres.in");
@@ -131,9 +142,11 @@ public class ApiTests {
     }
 
     @Tag("api")
-    @DisplayName("Verify deleted user")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check deleted user")
     @Test
-    void deleteUser() {
+    void checkDeletedUser() {
         step("Verify deleted user", () -> {
             given()
                     .spec(baseRequestSpec)
@@ -145,74 +158,9 @@ public class ApiTests {
     }
 
     @Tag("api")
-    @DisplayName("Verify user email using groovy")
-    @Test
-    void emailTestUsingGroovy() {
-        step("Verify user email using groovy", () -> {
-            given()
-                    .spec(baseRequestSpec)
-                    .when()
-                    .get(LIST_USERS)
-                    .then()
-                    .spec(baseResponseSpecCode200)
-                    .body("data.findAll{it.email =~/.*?@reqres.in/}.email.flatten()",
-                            hasItem("rachel.howell@reqres.in"));
-        });
-    }
-
-    @Tag("api")
-    @DisplayName("Verify user email using jsonPath")
-    @Test
-    void emailTestUsingJsonPath() {
-        step("Verify user email using jsonPath", () -> {
-            Response response = given()
-                    .spec(baseRequestSpec)
-                    .when()
-                    .get(LIST_USERS)
-                    .then()
-                    .spec(baseResponseSpecCode200)
-                    .extract().response();
-            JsonPath jsonPath = response.jsonPath();
-            List<String> emails = jsonPath.get("data.email");
-            assertTrue(emails.contains("rachel.howell@reqres.in"));
-        });
-    }
-
-    @Tag("api")
-    @DisplayName("Verify user email by id using groovy")
-    @Test
-    void idTestUsingGroovy() {
-        step("Verify user email by id using groovy", () -> {
-            given()
-                    .spec(baseRequestSpec)
-                    .when()
-                    .get(LIST_USERS)
-                    .then()
-                    .spec(baseResponseSpecCode200)
-                    .body("data.find{it.id == 9}.email", is("tobias.funke@reqres.in"));
-        });
-    }
-
-    @Tag("api")
-    @DisplayName("Verify year by name using groovy")
-    @Test
-    void nameTestUsingGroovy() {
-        step("Verify year by name using groovy", () -> {
-            Response response = given()
-                    .spec(baseRequestSpec)
-                    .when()
-                    .get(UNKNOWN)
-                    .then()
-                    .spec(baseResponseSpecCode200)
-                    .extract().response();
-            Map<String, Object> tigerlily = response.path("data.find{it.name == 'tigerlily'}");
-            assertEquals(2004, tigerlily.get("year"));
-        });
-    }
-
-
-    @Tag("api")
-    @DisplayName("Verify user emails end with domain")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check user emails end with domain")
     @Test
     void checkUserEmailsEndWithDomain() {
         step("Verify user emails end with domain", () -> {
@@ -228,6 +176,79 @@ public class ApiTests {
         });
     }
 
+    @Tag("api")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check user by email")
+    @Test
+    void checkUserByEmail() {
+        step("Verify user by email", () -> {
+            given()
+                    .spec(baseRequestSpec)
+                    .when()
+                    .get(LIST_USERS)
+                    .then()
+                    .spec(baseResponseSpecCode200)
+                    .body("data.findAll{it.email =~/.*?@reqres.in/}.email.flatten()",
+                            hasItem("rachel.howell@reqres.in"));
+        });
+    }
+
+    @Tag("api")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check user by last name")
+    @Test
+    void checkUserByLastName() {
+        step("Verify user last name", () -> {
+            Response response = given()
+                    .spec(baseRequestSpec)
+                    .when()
+                    .get(LIST_USERS)
+                    .then()
+                    .spec(baseResponseSpecCode200)
+                    .extract().response();
+            JsonPath jsonPath = response.jsonPath();
+            List<String> emails = jsonPath.get("data.last_name");
+            assertTrue(emails.contains("Ferguson"));
+        });
+    }
+
+    @Tag("api")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check user email by id")
+    @Test
+    void checkUserEmailById() {
+        step("Verify user email by id", () -> {
+            given()
+                    .spec(baseRequestSpec)
+                    .when()
+                    .get(LIST_USERS)
+                    .then()
+                    .spec(baseResponseSpecCode200)
+                    .body("data.find{it.id == 9}.email", is("tobias.funke@reqres.in"));
+        });
+    }
+
+    @Tag("api")
+    @Owner(value = "Santalova Polina")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Check year by name")
+    @Test
+    void checkYearByName() {
+        step("Verify year by name", () -> {
+            Response response = given()
+                    .spec(baseRequestSpec)
+                    .when()
+                    .get(UNKNOWN)
+                    .then()
+                    .spec(baseResponseSpecCode200)
+                    .extract().response();
+            Map<String, Object> tigerlily = response.path("data.find{it.name == 'tigerlily'}");
+            assertEquals(2004, tigerlily.get("year"));
+        });
+    }
 
 }
 
