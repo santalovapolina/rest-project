@@ -20,7 +20,7 @@
 <a href="https://www.jenkins.io/"><img src="images/logos/Jenkins.svg" width="50" height="50"  alt="Jenkins"/></a>
 <a><img src="images/logos/Allure_TO.svg" width="50" height="50"  alt="Allure TestOps"/></a>
 <a><img src="images/logos/Telegram.svg" width="50" height="50"  alt="Telegram"/></a>
-<a><img src="images/logos/Rest Assured" width="50" height="50"  alt="Rest Assured"/></a>
+<a><img src="images/logos/Rest-Assured.svg" width="50" height="50"  alt="Rest-Assured"/></a>
 </p>
 
 ## :bookmark: Запуск тестов из терминала
