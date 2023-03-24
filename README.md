@@ -1,4 +1,4 @@
-# Проект по автоматизации тестирования api для Reqres.in
+# Проект по автоматизации api для Reqres.in
 <a target="_blank" href="https://reqres.in/">Reqres.in</a>
 ## :card_file_box: Содержание
 - [Технологии и инструменты](#bookmark-технологии-и-инструменты)
