@@ -12,8 +12,6 @@ import models.SingleUserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +34,7 @@ public class ApiTests {
     @DisplayName("Check total users number")
     @Test
     void checkTotalUsersNumber() {
+
         step("Verify total users number", () -> {
             given()
                     .spec(baseRequestSpec)
@@ -53,11 +52,12 @@ public class ApiTests {
     @DisplayName("Check single user data")
     @Test
     void checkSingleUserData() {
+
         step("Verify single user by id, email, first and last name", () -> {
             SingleUserResponse data = given()
                     .spec(baseRequestSpec)
                     .when()
-                    .get(INTERACT_WITH_USER)
+                    .get(SINGLE_USER)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(SingleUserResponse.class);
@@ -76,10 +76,14 @@ public class ApiTests {
     @DisplayName("Check created user data")
     @Test
     void checkCreatedUserData() {
+
+        String userName = "Elon Musk";
+        String userJob = "professional martian";
+
         step("Verify created user data", () -> {
             CreateUpdateUserPayload data = new CreateUpdateUserPayload();
-            data.setName("Elon Musk");
-            data.setJob("professional martian");
+            data.setName(userName);
+            data.setJob(userJob);
             CreateUpdateUserPayload.CreateUserResponse response = given()
                     .spec(baseRequestSpec)
                     .body(data)
@@ -89,8 +93,8 @@ public class ApiTests {
                     .spec(baseResponseSpecCode201)
                     .extract().as(CreateUpdateUserPayload.CreateUserResponse.class);
 
-            assertThat(response.getName()).isEqualTo("Elon Musk");
-            assertThat(response.getJob()).isEqualTo("professional martian");
+            assertThat(response.getName()).isEqualTo(userName);
+            assertThat(response.getJob()).isEqualTo(userJob);
         });
     }
 
@@ -100,21 +104,25 @@ public class ApiTests {
     @DisplayName("Check updated user data")
     @Test
     void checkUpdatedUserData() {
+
+        String userName = "Moe";
+        String userJob = "Bartender";
+
         step("Verify updated user data", () -> {
             CreateUpdateUserPayload data = new CreateUpdateUserPayload();
-            data.setName("Moe");
-            data.setJob("Bartender");
+            data.setName(userName);
+            data.setJob(userJob);
             CreateUpdateUserPayload.UpdateUserResponse response = given()
                     .spec(baseRequestSpec)
                     .body(data)
                     .when()
-                    .put(INTERACT_WITH_USER)
+                    .put(SINGLE_USER)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(CreateUpdateUserPayload.UpdateUserResponse.class);
 
-            assertThat(response.getName()).isEqualTo("Moe");
-            assertThat(response.getJob()).isEqualTo("Bartender");
+            assertThat(response.getName()).isEqualTo(userName);
+            assertThat(response.getJob()).isEqualTo(userJob);
         });
     }
 
@@ -124,6 +132,9 @@ public class ApiTests {
     @DisplayName("Check registration token")
     @Test
     void checkRegistrationToken() {
+
+        String token = "QpwL5tke4Pnpja7X4";
+
         step("Verify registration token", () -> {
             LoginPayload data = new LoginPayload();
             data.setEmail("eve.holt@reqres.in");
@@ -132,12 +143,12 @@ public class ApiTests {
                     .spec(baseRequestSpec)
                     .body(data)
                     .when()
-                    .post(REGISTER_USER)
+                    .post(REGISTER)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().as(LoginPayload.LoginResponse.class);
 
-            assertThat(response.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
+            assertThat(response.getToken()).isEqualTo(token);
         });
     }
 
@@ -147,11 +158,12 @@ public class ApiTests {
     @DisplayName("Check deleted user")
     @Test
     void checkDeletedUser() {
+
         step("Verify deleted user", () -> {
             given()
                     .spec(baseRequestSpec)
                     .when()
-                    .delete(INTERACT_WITH_USER)
+                    .delete(SINGLE_USER)
                     .then()
                     .spec(baseResponseSpecCode204);
         });
@@ -163,6 +175,7 @@ public class ApiTests {
     @DisplayName("Check user emails end with domain")
     @Test
     void checkUserEmailsEndWithDomain() {
+
         step("Verify user emails end with domain", () -> {
             List<ListUsersResponse> users = given()
                     .spec(baseRequestSpec)
@@ -182,6 +195,7 @@ public class ApiTests {
     @DisplayName("Check user by email")
     @Test
     void checkUserByEmail() {
+
         step("Verify user by email", () -> {
             given()
                     .spec(baseRequestSpec)
@@ -200,6 +214,7 @@ public class ApiTests {
     @DisplayName("Check user by last name")
     @Test
     void checkUserByLastName() {
+
         step("Verify user last name", () -> {
             Response response = given()
                     .spec(baseRequestSpec)
@@ -220,6 +235,7 @@ public class ApiTests {
     @DisplayName("Check user email by id")
     @Test
     void checkUserEmailById() {
+
         step("Verify user email by id", () -> {
             given()
                     .spec(baseRequestSpec)
@@ -237,6 +253,7 @@ public class ApiTests {
     @DisplayName("Check year by name")
     @Test
     void checkYearByName() {
+
         step("Verify year by name", () -> {
             Response response = given()
                     .spec(baseRequestSpec)

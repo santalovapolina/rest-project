@@ -1,12 +1,15 @@
-# Проект по автоматизации тестирования api для Reqres.in
-<a target="_blank" href="https://reqres.in/">Reqres.in</a>
+# Проект по автоматизации тестирования API
+<p align="center">
+<a href="https://reqres.in/"><img src="images/logos/reqres.jpg"/></a>
+</p>
+
 ## :card_file_box: Содержание
 - [Технологии и инструменты](#bookmark-технологии-и-инструменты)
 - [Запуск из терминала](#bookmark-запуск-тестов-из-терминала)
 - [Сборка в Jenkins](#bookmark--jenkins--job-)
 - [Allure отчет](#bookmark--отчет-в-allure-report)
 - [Уведомление в Telegram](#bookmark--уведомление-в-telegram)
-- [Allure TestOps]()
+- [Allure TestOps](#bookmark--добавление-интеграции-с-allure-testops)
 
 ## :bookmark: Технологии и инструменты
 <p align="center">
