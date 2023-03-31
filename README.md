@@ -54,7 +54,7 @@ api_test
 ## :bookmark: <img src="images/logos/Telegram.svg" width="25" height="25"  alt="Telegram"/></a> Уведомление в Telegram
 
 <p align="center">
-<img title="Allure Overview Dashboard" src="images/screens/telegram.jpg">
+<img title="Telegram notification" src="images/screens/telegram.jpg">
 </p>
 
 ## :bookmark: <img src="images/logos/Allure_TO.svg" width="25" height="25" alt="Allure TestOps"/></a> Добавление интеграции с Allure TestOps
