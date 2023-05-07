@@ -41,7 +41,7 @@ public class UsersApiTests {
                     .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
-                    .get(LIST_USERS)
+                    .get(USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .body("total", equalTo(12));
@@ -151,7 +151,7 @@ public class UsersApiTests {
                     .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
-                    .get(LIST_USERS)
+                    .get(USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().body().jsonPath().getList("data", ListUsersResponse.class);
@@ -171,7 +171,7 @@ public class UsersApiTests {
                     .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
-                    .get(LIST_USERS)
+                    .get(USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .body("data.findAll{it.email =~/.*?@reqres.in/}.email.flatten()",
@@ -190,7 +190,7 @@ public class UsersApiTests {
                     .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
-                    .get(LIST_USERS)
+                    .get(USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .extract().response();
@@ -211,7 +211,7 @@ public class UsersApiTests {
                     .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
-                    .get(LIST_USERS)
+                    .get(USERS)
                     .then()
                     .spec(baseResponseSpecCode200)
                     .body("data.find{it.id == 9}.email", is("tobias.funke@reqres.in"));
