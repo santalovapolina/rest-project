@@ -7,10 +7,10 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import models.CreateUpdateUserPayload;
 import models.ListUsersResponse;
-import models.LoginPayload;
 import models.SingleUserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -21,22 +21,24 @@ import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static specs.Specs.*;
 
 
-public class ApiTests {
+@Tags({@Tag("api"), @Tag("user")})
+@Owner(value = "Santalova Polina")
+public class UsersApiTests {
 
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Check total users number")
     @Test
+    @DisplayName("Check total users number")
+    @Severity(SeverityLevel.NORMAL)
     void checkTotalUsersNumber() {
 
         step("Verify total users number", () -> {
             given()
+                    .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
                     .get(LIST_USERS)
@@ -46,11 +48,10 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Check single user data")
+
     @Test
+    @DisplayName("Check single user data")
+    @Severity(SeverityLevel.CRITICAL)
     void checkSingleUserData() {
 
         step("Verify single user by id, email, first and last name", () -> {
@@ -70,11 +71,9 @@ public class ApiTests {
     }
 
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Check created user data")
     @Test
+    @DisplayName("Check created user data")
+    @Severity(SeverityLevel.CRITICAL)
     void checkCreatedUserData() {
 
         String userName = "Elon Musk";
@@ -98,11 +97,10 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Check updated user data")
+
     @Test
+    @DisplayName("Check updated user data")
+    @Severity(SeverityLevel.NORMAL)
     void checkUpdatedUserData() {
 
         String userName = "Moe";
@@ -126,37 +124,10 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.BLOCKER)
-    @DisplayName("Check registration token")
+
     @Test
-    void checkRegistrationToken() {
-
-        String token = "QpwL5tke4Pnpja7X4";
-
-        step("Verify registration token", () -> {
-            LoginPayload data = new LoginPayload();
-            data.setEmail("eve.holt@reqres.in");
-            data.setPassword("pistol");
-            LoginPayload.LoginResponse response = given()
-                    .spec(baseRequestSpec)
-                    .body(data)
-                    .when()
-                    .post(REGISTER)
-                    .then()
-                    .spec(baseResponseSpecCode200)
-                    .extract().as(LoginPayload.LoginResponse.class);
-
-            assertThat(response.getToken()).isEqualTo(token);
-        });
-    }
-
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
     @DisplayName("Check deleted user")
-    @Test
+    @Severity(SeverityLevel.NORMAL)
     void checkDeletedUser() {
 
         step("Verify deleted user", () -> {
@@ -169,15 +140,15 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Check user emails end with domain")
+
     @Test
+    @DisplayName("Check user emails end with domain")
+    @Severity(SeverityLevel.NORMAL)
     void checkUserEmailsEndWithDomain() {
 
         step("Verify user emails end with domain", () -> {
             List<ListUsersResponse> users = given()
+                    .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
                     .get(LIST_USERS)
@@ -189,15 +160,15 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Check user by email")
+
     @Test
+    @DisplayName("Check user by email")
+    @Severity(SeverityLevel.NORMAL)
     void checkUserByEmail() {
 
         step("Verify user by email", () -> {
             given()
+                    .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
                     .get(LIST_USERS)
@@ -208,15 +179,15 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Check user by last name")
+
     @Test
+    @DisplayName("Check user by last name")
+    @Severity(SeverityLevel.NORMAL)
     void checkUserByLastName() {
 
         step("Verify user last name", () -> {
             Response response = given()
+                    .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
                     .get(LIST_USERS)
@@ -229,15 +200,15 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Check user email by id")
+
     @Test
+    @DisplayName("Check user email by id")
+    @Severity(SeverityLevel.NORMAL)
     void checkUserEmailById() {
 
         step("Verify user email by id", () -> {
             given()
+                    .queryParam("page", "2")
                     .spec(baseRequestSpec)
                     .when()
                     .get(LIST_USERS)
@@ -247,11 +218,10 @@ public class ApiTests {
         });
     }
 
-    @Tag("api")
-    @Owner(value = "Santalova Polina")
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Check year by name")
+
     @Test
+    @DisplayName("Check year by name")
+    @Severity(SeverityLevel.NORMAL)
     void checkYearByName() {
 
         step("Verify year by name", () -> {
